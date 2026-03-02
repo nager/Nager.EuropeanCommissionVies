@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Nager.EuropeanCommissionVies.UnitTest/Nager.EuropeanCommissionVies.UnitTest.csproj" />
+  <Project Path="Nager.EuropeanCommissionVies/Nager.EuropeanCommissionVies.csproj" />
+</Solution>
