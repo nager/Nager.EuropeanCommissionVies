@@ -69,11 +69,12 @@ if (isValid)
 ```csharp
 var request = new VatCheckRequest
 {
-    VatNumber = "DE123456789",
-    Name = "Example Company",
-    Street = "Example Street 1",
-    PostalCode = "10115",
-    City = "Berlin"
+    VatNumber = "123456789",
+    CountryCode = "DE",
+    TraderName = "Example Company",
+    TraderStreet = "Example Street 1",
+    TraderPostalCode = "10115",
+    TraderCity = "Berlin"
 };
 
 var response = await viesClient.CheckVatAsync(request);
@@ -81,7 +82,7 @@ var response = await viesClient.CheckVatAsync(request);
 if (response != null)
 {
     Console.WriteLine($"Valid: {response.Valid}");
-    Console.WriteLine($"Name match: {response.NameMatch}");
+    Console.WriteLine($"Name match: {response.Name}");
 }
 ```
 
