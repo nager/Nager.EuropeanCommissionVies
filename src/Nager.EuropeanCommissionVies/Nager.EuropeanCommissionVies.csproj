@@ -1,11 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <Authors>Tino Hager</Authors>
+    <Company>nager.at</Company>
+    <Description>Lightweight .NET client for validating European VAT numbers via the official EU VIES API. Supports async validation and qualified VAT checks.</Description>
+    
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    
+    <LangVersion>12.0</LangVersion>
+    <IncludeSymbols>true</IncludeSymbols>
+    
     <Nullable>enable</Nullable>
+    
+    <!--<PackageIcon>logo.png</PackageIcon>-->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <!--<PackageReadmeFile>README.md</PackageReadmeFile>-->
+    <!--<PackageReleaseNotes>A changelog is available at https://github.com/nager/Nager.EuropeanCommissionVies/releases</PackageReleaseNotes>-->
+    <PackageProjectUrl>https://github.com/nager/Nager.EuropeanCommissionVies</PackageProjectUrl>
+    <PackageTags>VAT;VIES</PackageTags>
+    
+    <RepositoryUrl>https://github.com/nager/Nager.EuropeanCommissionVies</RepositoryUrl>
+    
+    <TargetFrameworks>net10.0</TargetFrameworks>
+    
+    <Version>1.0.0</Version>
   </PropertyGroup>
-
+	
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.3" />
   </ItemGroup>
