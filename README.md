@@ -33,15 +33,10 @@ Install-Package Nager.EuropeanCommissionVies
 ### Basic VAT validation
 
 ```csharp
-var host = Host.CreateDefaultBuilder(args)
-    .ConfigureServices(services =>
-    {
-        // Register VIES client with HttpClientFactory
-        services.AddHttpClient<IViesClient, ViesClient>();
-    })
-    .Build();
+var serviceProvider = new ServiceCollection().AddHttpClient().BuildServiceProvider();
+var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
 
-var viesClient = host.Services.GetRequiredService<IViesClient>();
+var viesClient = new ViesClient(httpClientFactory);
 
 var response = await viesClient.CheckVatAsync("DE123456789");
 
