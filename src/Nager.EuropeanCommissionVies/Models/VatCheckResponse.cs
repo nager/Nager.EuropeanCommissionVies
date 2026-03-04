@@ -1,4 +1,6 @@
-﻿namespace Nager.EuropeanCommissionVies.Models
+﻿using System;
+
+namespace Nager.EuropeanCommissionVies.Models
 {
     /// <summary>
     /// Represents the response of a VAT validation request performed via the

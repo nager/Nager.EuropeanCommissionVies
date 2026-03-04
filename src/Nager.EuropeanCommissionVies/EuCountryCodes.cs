@@ -1,4 +1,7 @@
-﻿namespace Nager.EuropeanCommissionVies
+﻿using System;
+using System.Linq;
+
+namespace Nager.EuropeanCommissionVies
 {
     /// <summary>
     /// Provides helper data related to European Union (EU) member states.
