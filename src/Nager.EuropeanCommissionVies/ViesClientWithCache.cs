@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using Nager.EuropeanCommissionVies.Models;
 using System;
 using System.Net.Http;
@@ -30,12 +31,13 @@ namespace Nager.EuropeanCommissionVies
         /// <param name="memoryCache"></param>
         public ViesClientWithCache(
             IHttpClientFactory httpClientFactory,
-            IMemoryCache memoryCache) : base(httpClientFactory)
+            IMemoryCache memoryCache,
+            IOptions<ViesClientOptions> options) : base(httpClientFactory)
         {
             this._memoryCache = memoryCache;
 
             this._memoryCacheEntryOptions = new MemoryCacheEntryOptions()
-                .SetAbsoluteExpiration(TimeSpan.FromMinutes(15));
+                .SetAbsoluteExpiration(TimeSpan.FromMinutes(options.Value.CacheMinutes));
         }
 
         /// <inheritdoc />
@@ -72,7 +74,7 @@ namespace Nager.EuropeanCommissionVies
 
             vatCheckResponse = await this.CheckVatNumberAsync(vatCheckRequest, cancellationToken);
 
-            this._memoryCache.Set(vatNumber, vatCheckResponse);
+            this._memoryCache.Set(vatNumber, vatCheckResponse, this._memoryCacheEntryOptions);
 
             return vatCheckResponse;
         }

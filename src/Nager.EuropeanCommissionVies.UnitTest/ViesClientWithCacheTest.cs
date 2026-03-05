@@ -13,8 +13,10 @@ namespace Nager.EuropeanCommissionVies.UnitTest
 
         private ViesClientWithCache GetViesClient()
         {
-            var options = Options.Create(new MemoryCacheOptions());
-            var memoryCache = new MemoryCache(options);
+            var options = Options.Create(new ViesClientOptions { CacheMinutes = 30 });
+
+            var memoryCacheOptions = Options.Create(new MemoryCacheOptions());
+            var memoryCache = new MemoryCache(memoryCacheOptions);
 
             var httpClient = new HttpClient();
 
@@ -23,7 +25,7 @@ namespace Nager.EuropeanCommissionVies.UnitTest
                 .Setup(_ => _.CreateClient(It.IsAny<string>()))
                 .Returns(httpClient);
 
-            return new ViesClientWithCache(httpClientFactoryMock.Object, memoryCache);
+            return new ViesClientWithCache(httpClientFactoryMock.Object, memoryCache, options);
         }
 
         [TestMethod]
@@ -34,7 +36,7 @@ namespace Nager.EuropeanCommissionVies.UnitTest
 
             VatCheckResponse? vatCheckResponse = null;
 
-            for (var i = 0; i < 10; i++)
+            for (var i = 0; i < 20; i++)
             {
                 try
                 {
@@ -42,7 +44,7 @@ namespace Nager.EuropeanCommissionVies.UnitTest
                 }
                 catch (ViesException exception)
                 {
-                    await Task.Delay(300, TestContext.CancellationToken);
+                    await Task.Delay(500, TestContext.CancellationToken);
                     Trace.WriteLine($"ViesException: {exception} {exception.RawResponseBody}");
                 }                
             }
