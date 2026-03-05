@@ -1,4 +1,5 @@
-﻿using Nager.EuropeanCommissionVies.Models;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Nager.EuropeanCommissionVies.Models;
 using System;
 using System.Net.Http;
 using System.Threading;
@@ -14,17 +15,27 @@ namespace Nager.EuropeanCommissionVies
     /// qualified VAT checks with additional trader information.
     /// It uses an injected <see cref="IHttpClientFactory"/> to create <see cref="HttpClient"/> instances.
     /// </remarks>
-    public class ViesClient : ViesClientBase
+    public class ViesClientWithCache : ViesClientBase
     {
+        private readonly IMemoryCache _memoryCache;
+        private readonly MemoryCacheEntryOptions _memoryCacheEntryOptions;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="ViesClient"/> class.
+        /// Initializes a new instance of the <see cref="ViesClientWithCache"/> class.
         /// </summary>
         /// <param name="httpClientFactory">
         /// Factory to create <see cref="HttpClient"/> instances. 
         /// The client is configured with the VIES API base address.
         /// </param>
-        public ViesClient(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+        /// <param name="memoryCache"></param>
+        public ViesClientWithCache(
+            IHttpClientFactory httpClientFactory,
+            IMemoryCache memoryCache) : base(httpClientFactory)
         {
+            this._memoryCache = memoryCache;
+
+            this._memoryCacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromMinutes(15));
         }
 
         /// <inheritdoc />
@@ -51,7 +62,19 @@ namespace Nager.EuropeanCommissionVies
                 VatNumber = nationalPart,
             };
 
-            return await this.CheckVatNumberAsync(vatCheckRequest, cancellationToken);
+            if (this._memoryCache.TryGetValue<VatCheckResponse>(vatNumber, out var vatCheckResponse))
+            {
+                if (vatCheckResponse is not null)
+                {
+                    return vatCheckResponse;
+                }
+            }
+
+            vatCheckResponse = await this.CheckVatNumberAsync(vatCheckRequest, cancellationToken);
+
+            this._memoryCache.Set(vatNumber, vatCheckResponse);
+
+            return vatCheckResponse;
         }
 
         /// <inheritdoc />
@@ -59,7 +82,19 @@ namespace Nager.EuropeanCommissionVies
             VatCheckRequest vatCheckRequest,
             CancellationToken cancellationToken = default)
         {
-            return await this.CheckVatNumberAsync(vatCheckRequest, cancellationToken); 
+            if (this._memoryCache.TryGetValue<VatCheckResponse>(vatCheckRequest.VatNumber, out var vatCheckResponse))
+            {
+                if (vatCheckResponse is not null)
+                {
+                    return vatCheckResponse;
+                }
+            }
+
+            vatCheckResponse = await this.CheckVatNumberAsync(vatCheckRequest, cancellationToken);
+
+            this._memoryCache.Set(vatCheckRequest.VatNumber, vatCheckResponse);
+
+            return vatCheckResponse;
         }
 
         /// <inheritdoc />
