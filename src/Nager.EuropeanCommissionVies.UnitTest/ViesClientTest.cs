@@ -205,7 +205,11 @@ namespace Nager.EuropeanCommissionVies.UnitTest
                 finally
                 {
                     stopwatch.Stop();
-                    Trace.WriteLine($"{countryName} - {vatNumber} {stopwatch.Elapsed.TotalMilliseconds}ms {vatCheckResponse?.Valid} {vatCheckResponse?.Name}");
+                    Trace.WriteLine($"{countryName} - [{vatNumber}]");
+                    Trace.WriteLine($"{stopwatch.Elapsed.TotalMilliseconds}ms");
+                    Trace.WriteLine($"Valid: {vatCheckResponse?.Valid}");
+                    Trace.WriteLine($"Name: {vatCheckResponse?.Name}");
+                    Trace.WriteLine($"Address: {vatCheckResponse?.Address}");
                 }
             }
 
