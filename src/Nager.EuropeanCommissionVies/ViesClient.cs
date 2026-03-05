@@ -45,16 +45,11 @@ namespace Nager.EuropeanCommissionVies
             CancellationToken cancellationToken = default)
         {
             var response = await this.CheckVatAsync(vatNumber, cancellationToken);
-            if (response is null)
-            {
-                return false;
-            }
-
             return response.Valid;
         }
 
         /// <inheritdoc />
-        public async Task<VatCheckResponse?> CheckVatAsync(
+        public async Task<VatCheckResponse> CheckVatAsync(
             string vatNumber,
             CancellationToken cancellationToken = default)
         {
@@ -80,49 +75,79 @@ namespace Nager.EuropeanCommissionVies
             using var httpResponseMessage = await this._httpClient.PostAsJsonAsync("check-vat-number", vatCheckRequest, this._jsonSerializerOptions, cancellationToken);
             if (!httpResponseMessage.IsSuccessStatusCode)
             {
-                return null;
+                var errorContent = await httpResponseMessage.Content.ReadAsStringAsync(cancellationToken);
+
+                throw new ViesException(
+                    $"VIES API returned {(int)httpResponseMessage.StatusCode} ({httpResponseMessage.ReasonPhrase})",
+                    httpResponseMessage.StatusCode,
+                    errorContent
+                );
             }
 
             var jsonResponse = await httpResponseMessage.Content.ReadAsStringAsync(cancellationToken);
-
             if (jsonResponse.Contains("errorWrappers", StringComparison.OrdinalIgnoreCase))
             {
-                var errorResponse = JsonSerializer.Deserialize<VatCheckErrorResponse>(jsonResponse, this._jsonSerializerOptions);
-                return null;
+                var vatCheckErrorResponse = JsonSerializer.Deserialize<VatCheckErrorResponse>(jsonResponse, this._jsonSerializerOptions);
+
+                throw new ViesException(
+                    $"VIES API returned {(int)httpResponseMessage.StatusCode} ({httpResponseMessage.ReasonPhrase})",
+                    httpResponseMessage.StatusCode,
+                    jsonResponse,
+                    vatCheckErrorResponse
+                );
             }
 
             var checkResponse = JsonSerializer.Deserialize<VatCheckResponse>(jsonResponse, this._jsonSerializerOptions);
             if (checkResponse is null)
             {
-                return null;
+                throw new ViesException(
+                    "VIES API returned a successful status code, but the response body could not be deserialized or was empty.",
+                    httpResponseMessage.StatusCode,
+                    jsonResponse
+                );
             }
 
             return checkResponse;
         }
 
         /// <inheritdoc />
-        public async Task<VatCheckResponse?> CheckVatAsync(
+        public async Task<VatCheckResponse> CheckVatAsync(
             VatCheckRequest vatCheckRequest,
             CancellationToken cancellationToken = default)
         {
             using var httpResponseMessage = await this._httpClient.PostAsJsonAsync("check-vat-number", vatCheckRequest, this._jsonSerializerOptions, cancellationToken);
             if (!httpResponseMessage.IsSuccessStatusCode)
             {
-                return null;
+                var errorContent = await httpResponseMessage.Content.ReadAsStringAsync(cancellationToken);
+
+                throw new ViesException(
+                    $"VIES API returned {(int)httpResponseMessage.StatusCode} ({httpResponseMessage.ReasonPhrase})",
+                    httpResponseMessage.StatusCode,
+                    errorContent
+                );
             }
 
             var jsonResponse = await httpResponseMessage.Content.ReadAsStringAsync(cancellationToken);
-
             if (jsonResponse.Contains("errorWrappers", StringComparison.OrdinalIgnoreCase))
             {
-                var errorResponse = JsonSerializer.Deserialize<VatCheckErrorResponse>(jsonResponse, this._jsonSerializerOptions);
-                return null;
+                var vatCheckErrorResponse = JsonSerializer.Deserialize<VatCheckErrorResponse>(jsonResponse, this._jsonSerializerOptions);
+
+                throw new ViesException(
+                    $"VIES API returned {(int)httpResponseMessage.StatusCode} ({httpResponseMessage.ReasonPhrase})",
+                    httpResponseMessage.StatusCode,
+                    jsonResponse,
+                    vatCheckErrorResponse
+                );
             }
 
             var checkResponse = JsonSerializer.Deserialize<VatCheckResponse>(jsonResponse, this._jsonSerializerOptions);
             if (checkResponse is null)
             {
-                return null;
+                throw new ViesException(
+                    "VIES API returned a successful status code, but the response body could not be deserialized or was empty.",
+                    httpResponseMessage.StatusCode,
+                    jsonResponse
+                );
             }
 
             return checkResponse;

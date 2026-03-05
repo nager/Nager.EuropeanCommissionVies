@@ -81,6 +81,12 @@ if (response != null)
 }
 ```
 
+## Error Codes
+
+| Code                   | Description                                                                                                      |
+|------------------------|------------------------------------------------------------------------------------------------------------------|
+| MS_MAX_CONCURRENT_REQ  | The maximum number of concurrent requests is not linked to a specific IP. It is a global count across all users. |
+
 ## 🌍 About VIES
 
 The VAT Information Exchange System (VIES) is operated by the European Commission and allows validation of VAT numbers registered within the European Union.

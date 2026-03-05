@@ -1,9 +1,13 @@
 ﻿using Nager.EuropeanCommissionVies.Models;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Nager.EuropeanCommissionVies
 {
+    /// <summary>
+    /// Vies Client Interface
+    /// </summary>
     public interface IViesClient
     {
         /// <summary>
@@ -22,7 +26,7 @@ namespace Nager.EuropeanCommissionVies
         /// The VAT number must include at least a 2-letter country code and a national part.
         /// For advanced "qualified" checks, use <see cref="CheckVatAsync(VatCheckRequest, CancellationToken)"/> with trader details.
         /// </remarks>
-        Task<VatCheckResponse?> CheckVatAsync(
+        Task<VatCheckResponse> CheckVatAsync(
             string vatNumber,
             CancellationToken cancellationToken = default);
 
@@ -38,7 +42,7 @@ namespace Nager.EuropeanCommissionVies
         /// <remarks>
         /// Use this method to perform qualified VAT validation by providing trader name, address, and company type.
         /// </remarks>
-        Task<VatCheckResponse?> CheckVatAsync(
+        Task<VatCheckResponse> CheckVatAsync(
             VatCheckRequest vatCheckRequest,
             CancellationToken cancellationToken = default);
 
@@ -50,7 +54,8 @@ namespace Nager.EuropeanCommissionVies
         /// </param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
         /// <returns><c>true</c> if the VAT number is valid; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="vatNumber"/> is null, empty, or too short.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="vatNumber"/> is too short.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="vatNumber"/> is null or empty.</exception>
         Task<bool> IsValidVatAsync(
             string vatNumber,
             CancellationToken cancellationToken = default);
