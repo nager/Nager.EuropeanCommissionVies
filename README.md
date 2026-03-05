@@ -16,7 +16,7 @@ This library provides simple and strongly typed access to VAT validation includi
 
 ## 📦 Installation
 
-Install via NuGet:
+Install via [NuGet](https://www.nuget.org/packages/Nager.EuropeanCommissionVies):
 
 ```bash
 dotnet add package Nager.EuropeanCommissionVies
