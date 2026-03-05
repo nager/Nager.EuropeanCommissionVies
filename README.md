@@ -99,6 +99,8 @@ if (response != null)
 | DE          | DE99999999p  | USt-IdNr.                    |
 | DK          | DK99999999   | SE-Nr.                       |
 
+`p`= Check Digit
+
 https://en.wikipedia.org/wiki/VAT_identification_number
 
 ## 🌍 About VIES
