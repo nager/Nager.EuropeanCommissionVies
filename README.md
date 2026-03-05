@@ -87,6 +87,20 @@ if (response != null)
 |------------------------|------------------------------------------------------------------------------------------------------------------|
 | MS_MAX_CONCURRENT_REQ  | The maximum number of concurrent requests is not linked to a specific IP. It is a global count across all users. |
 
+## Vat number structure
+
+| CountryCode | Example      | Abbreviation                 |
+|-------------|--------------|------------------------------|
+| AT          | ATU9999999p  | UID                          |
+| BE          | BE999999999p | N° TVA / BTW-nr. / MwSt.-Nr. |
+| BG          | BG99999999p  | DDS (ДДС)                    |
+| CY          | CY50999999L  | FPA                          |
+| CZ          | CZ901231999p | DIČ                          |
+| DE          | DE99999999p  | USt-IdNr.                    |
+| DK          | DK99999999   | SE-Nr.                       |
+
+https://en.wikipedia.org/wiki/VAT_identification_number
+
 ## 🌍 About VIES
 
 The VAT Information Exchange System (VIES) is operated by the European Commission and allows validation of VAT numbers registered within the European Union.
