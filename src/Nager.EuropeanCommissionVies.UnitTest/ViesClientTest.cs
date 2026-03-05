@@ -65,12 +65,15 @@ namespace Nager.EuropeanCommissionVies.UnitTest
         [DataRow("IT06363391001", "AGENZIA DELLE ENTRATE")]
         [DataRow("FR91110020013", "MINISTERE DE L'ECONOMIE, DES FINANCE")]
         [DataRow("ESA28015865", "---")] //Telefónica Spain
+        [DataRow("BE0890082292", "NV BRUSSELS AIRPORT COMPANY")]
+        [DataRow("BG175074752", "ПРОФИ КРЕДИТ  БЪЛГАРИЯ - ЕООД")]
+        [DataRow("HR33392005961", "NASTAVNI ZAVOD ZA JAVNO ZDRAVSTVO DR. ANDRIJA ŠTA")]
         [TestMethod]
         public async Task CheckVatAsync_ValidVatNumber_ReturnsExpectedNameWithRetry(string vatNumber, string name)
         {
             var client = this.GetViesClient();
 
-            VatCheckResponse vatCheckResponse = null;
+            VatCheckResponse? vatCheckResponse = null;
 
             for (var i = 0; i < 10; i++)
             {
@@ -81,7 +84,7 @@ namespace Nager.EuropeanCommissionVies.UnitTest
                 }
                 catch (ViesException exception)
                 {
-                    await Task.Delay(300);
+                    await Task.Delay(300, TestContext.CancellationToken);
                     Trace.WriteLine($"ViesException: {exception} {exception.RawResponseBody}");
                 }                
             }
