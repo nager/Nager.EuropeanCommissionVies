@@ -29,6 +29,7 @@ namespace Nager.EuropeanCommissionVies
         /// The client is configured with the VIES API base address.
         /// </param>
         /// <param name="memoryCache"></param>
+        /// <param name="options"></param>
         public ViesClientWithCache(
             IHttpClientFactory httpClientFactory,
             IMemoryCache memoryCache,
